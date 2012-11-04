@@ -7,7 +7,6 @@ import java.util.Random;
  */
 public class Agent {
 
-	private String name;
 	private int[] coords;
 	private Map quadrant;
 	private final int moveAlgo;
@@ -18,22 +17,13 @@ public class Agent {
 	private boolean yPositive;
 	private static final Random gen = new Random();
 
-	public Agent(String name, int[] coords) {
-		this.name = name;
+	public Agent(int[] coords) {
 		this.coords = coords;
 		moveAlgo = gen.nextInt(maxMoveAlgos);
 		MAX_X_BOUNDARY = 30 + gen.nextInt(280);
 		MAX_Y_BOUNDARY = 30 + gen.nextInt(200);
 		xPositive = gen.nextBoolean();
 		yPositive = gen.nextBoolean();
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public int[] getCoords() {

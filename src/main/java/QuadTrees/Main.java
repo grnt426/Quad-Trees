@@ -39,7 +39,7 @@ public class Main {
 			int[] location = new int[2];
 			location[0] = x;
 			location[1] = y;
-			Agent a = new Agent("Bob", location);
+			Agent a = new Agent(location);
 			map.trackAgent(a);
 			agents.add(a);
 			x += 27;

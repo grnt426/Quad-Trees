@@ -21,7 +21,7 @@ public class MapTest extends TestCase {
 
 	public void testGetAgents() throws Exception {
 		Map map = new Map(null, 0);
-		map.trackAgent(new Agent("Bob", null));
+		map.trackAgent(new Agent(null));
 		assertEquals(1, map.getAgents().size());
 	}
 
@@ -40,7 +40,7 @@ public class MapTest extends TestCase {
 		agentCoords[0] = 75;
 		agentCoords[1] = 75;
 		Map map = new Map(coords, 1);
-		Agent a = new Agent("Bob", agentCoords);
+		Agent a = new Agent(agentCoords);
 		map.trackAgent(a);
 		assertEquals(1, map.getAgentsAtQuadrant(3).size());
 		assertEquals(map.getQuadrant(3), a.getQuadrant());
