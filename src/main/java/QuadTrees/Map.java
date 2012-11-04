@@ -16,6 +16,12 @@ public class Map {
 	 */
 	private HashMap<Integer, Map> map;
 
+	private static Map theRoot;
+
+	private Map parent;
+
+	private int quadNum;
+
 	/**
 	 * All the agents contained within this map.
 	 */
@@ -39,10 +45,14 @@ public class Map {
 	 *                 its child quadrants will not be).  If false, this quadrant
 	 *                 is not sub-divided.
 	 */
-	public Map(int[][] boundary, int part) {
+	public Map(int[][] boundary, int part, Map parent, int quadNum) {
+		if (theRoot == null)
+			theRoot = this;
 		map = new HashMap<Integer, Map>();
 		agents = new HashSet<Agent>();
 		this.boundary = boundary;
+		this.parent = parent;
+		this.quadNum = quadNum;
 		if (part > 0) {
 			partition(--part);
 		}
@@ -55,20 +65,20 @@ public class Map {
 	 * @return The quadrant the Agent was stored in.
 	 */
 	public Map trackAgent(Agent a) {
+		int[] loc = a.getCoords();
 		if (map.isEmpty()) {
 			agents.add(a);
 			a.setQuadrant(this);
 		} else {
-			int[] loc = a.getCoords();
 			if (loc[0] <= getMiddleXBoundary()) {
 				if (loc[1] <= getMiddleYBoundary()) {
 					return map.get(0).trackAgent(a);
 				} else {
-					return map.get(1).trackAgent(a);
+					return map.get(2).trackAgent(a);
 				}
 			} else {
 				if (loc[1] <= getMiddleYBoundary()) {
-					return map.get(2).trackAgent(a);
+					return map.get(1).trackAgent(a);
 				} else {
 					return map.get(3).trackAgent(a);
 				}
@@ -158,7 +168,8 @@ public class Map {
 	private void partition(int parts) {
 		if (map.isEmpty()) {
 			for (int i = 0; i < MAX_PARTS; i++) {
-				map.put(i, new Map(findNewPartitionBoundary(i), parts));
+				map.put(i, new Map(findNewPartitionBoundary(i), parts, this,
+						i));
 			}
 		} else {
 			// TODO: maybe re-partition to an exponential size?
@@ -195,5 +206,18 @@ public class Map {
 
 	public int getSubQuadrantCount() {
 		return map.size();
+	}
+
+	public void updateQuadrant(Agent agent) {
+		agents.remove(agent);
+		theRoot.trackAgent(agent); // TODO: optimize, maybe?
+	}
+
+	public int getQuadNum() {
+		return quadNum;
+	}
+
+	public Map getParent() {
+		return parent;
 	}
 }

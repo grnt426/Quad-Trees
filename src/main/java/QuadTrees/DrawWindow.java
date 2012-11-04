@@ -26,9 +26,22 @@ public class DrawWindow extends JPanel {
 		setBackground(Color.WHITE);
 
 		// Draw Agents before the grid
-		g.setColor(Color.BLUE);
 		for (Agent a : agents) {
 			int[] coords = a.getCoords();
+			switch (a.getQuadrant().getQuadNum()) {
+				case 0:
+					g.setColor(Color.BLUE);
+					break;
+				case 1:
+					g.setColor(Color.MAGENTA);
+					break;
+				case 2:
+					g.setColor(Color.RED);
+					break;
+				case 3:
+				default:
+					g.setColor(Color.DARK_GRAY);
+			}
 			g.drawOval(coords[0], coords[1], 3, 3);
 		}
 
@@ -41,6 +54,11 @@ public class DrawWindow extends JPanel {
 		g.drawRect(node.getStartX(), node.getStartY(),
 				node.getEndX() - node.getStartX(),
 				node.getEndY() - node.getStartY());
+		if (node.getSubQuadrantCount() == 0) {
+			String quadNum = node.getQuadNum() + "";
+			g.drawChars(quadNum.toCharArray(), 0, quadNum.length(),
+					node.getStartX() + 5, node.getStartY() + 15);
+		}
 		for (int i = 0; i < node.getSubQuadrantCount(); i++) {
 			drawGrid(node.getQuadrant(i), g);
 		}

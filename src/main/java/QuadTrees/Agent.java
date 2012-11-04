@@ -48,6 +48,7 @@ public class Agent {
 			default:
 				squareMove(tick);
 		}
+		quadrant.updateQuadrant(this);
 	}
 
 	private void squareMove(long tick) {

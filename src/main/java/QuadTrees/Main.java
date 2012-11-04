@@ -26,14 +26,14 @@ public class Main {
 		boundary[0][1] = 0;
 		boundary[1][0] = 640;
 		boundary[1][1] = 480;
-		Map map = new Map(boundary, 0);
+		Map map = new Map(boundary, 2, null, -1);
 		agents = new ArrayList<Agent>();
 		Random gen = new Random();
 
 		int x = 10;
 		int y = 10;
 
-		for (int i = 0; i < 300; i++) {
+		for (int i = 0; i < 1; i++) {
 
 			// Setup the Agent
 			int[] location = new int[2];
@@ -66,7 +66,6 @@ public class Main {
 		long tick = 0;
 
 		while (true) {
-			System.out.println("Tick: " + tick);
 			moveAgents(tick++);
 			detectCollisions();
 			frame.repaint();
