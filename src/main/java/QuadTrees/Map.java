@@ -16,6 +16,8 @@ public class Map {
 	 */
 	private HashMap<Integer, Map> map;
 
+	private static final Set<Map> containsMultiple = new HashSet<Map>();
+
 	private Map parent;
 
 	private int quadNum;
@@ -71,6 +73,8 @@ public class Map {
 		if (map.isEmpty()) {
 			agents.add(a);
 			a.setQuadrant(this);
+			if (agents.size() > 1)
+				containsMultiple.add(this);
 		} else {
 			if (loc[0] <= getMiddleXBoundary()) {
 				if (loc[1] <= getMiddleYBoundary()) {
@@ -214,6 +218,8 @@ public class Map {
 		if (parent == null)
 			return;
 		agents.remove(agent);
+		if (agents.size() < 2)
+			containsMultiple.remove(this);
 		Map curParent = parent;
 		while (curParent.trackAgent(agent) == null) {
 			curParent = curParent.getParent();
@@ -226,5 +232,9 @@ public class Map {
 
 	public Map getParent() {
 		return parent;
+	}
+
+	public static Set<Map> getContainsMultiple() {
+		return containsMultiple;
 	}
 }

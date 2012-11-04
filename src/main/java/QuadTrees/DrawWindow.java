@@ -43,7 +43,7 @@ public class DrawWindow extends JPanel {
 				default:
 					g.setColor(Color.DARK_GRAY);
 			}
-			g.drawOval(coords[0], coords[1], 3, 3);
+			g.fillRect(coords[0] - 1, coords[1] - 1, 3, 3);
 		}
 
 		// Now draw the grid so it appears on top
