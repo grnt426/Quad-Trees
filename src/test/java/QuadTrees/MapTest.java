@@ -40,7 +40,9 @@ public class MapTest extends TestCase {
 		agentCoords[0] = 75;
 		agentCoords[1] = 75;
 		Map map = new Map(coords, true);
-		map.trackAgent(new Agent("Bob", agentCoords));
+		Agent a = new Agent("Bob", agentCoords);
+		map.trackAgent(a);
 		assertEquals(1, map.getAgentsAtQuadrant(3).size());
+		assertEquals(map.getQuadrant(3), a.getQuadrant());
 	}
 }

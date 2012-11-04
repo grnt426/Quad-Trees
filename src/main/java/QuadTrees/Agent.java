@@ -7,6 +7,7 @@ public class Agent {
 
 	private String name;
 	private int[] coords;
+	private Map quadrant;
 
 	public Agent(String name, int[] coords) {
 		this.name = name;
@@ -27,5 +28,13 @@ public class Agent {
 
 	public void setCoords(int[] coords) {
 		this.coords = coords;
+	}
+
+	public Map getQuadrant() {
+		return quadrant;
+	}
+
+	public void setQuadrant(Map quadrant) {
+		this.quadrant = quadrant;
 	}
 }

@@ -52,26 +52,30 @@ public class Map {
 	 * Either stores the agent at this quadrant, or delegates to a sub-quadrant.
 	 *
 	 * @param a The Agent to store in our Quadrant.
+	 * @return The quadrant the Agent was stored in.
 	 */
-	public void trackAgent(Agent a) {
+	public Map trackAgent(Agent a) {
 		if (map.isEmpty()) {
 			agents.add(a);
+			a.setQuadrant(this);
 		} else {
 			int[] loc = a.getCoords();
 			if (loc[0] <= getMiddleXBoundary()) {
 				if (loc[1] <= getMiddleYBoundary()) {
-					map.get(0).trackAgent(a);
+					return map.get(0).trackAgent(a);
 				} else {
-					map.get(1).trackAgent(a);
+					return map.get(1).trackAgent(a);
 				}
 			} else {
 				if (loc[1] <= getMiddleYBoundary()) {
-					map.get(2).trackAgent(a);
+					return map.get(2).trackAgent(a);
 				} else {
-					map.get(3).trackAgent(a);
+					return map.get(3).trackAgent(a);
 				}
 			}
 		}
+
+		return this;
 	}
 
 	public Set<Agent> getAgents() {
@@ -167,5 +171,9 @@ public class Map {
 
 	protected int getMiddleYBoundary() {
 		return (boundary[1][1] - boundary[0][1]) / 2 + boundary[0][1];
+	}
+
+	public Map getQuadrant(int i) {
+		return map.get(i);
 	}
 }
