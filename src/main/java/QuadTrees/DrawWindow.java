@@ -13,6 +13,7 @@ public class DrawWindow extends JPanel {
 
 	private final Map map;
 	private final ArrayList<Agent> agents;
+	private final Color GREEN = new Color(50, 205, 80);
 
 	public DrawWindow(Map map, ArrayList<Agent> agents) {
 		this.map = map;
@@ -33,7 +34,7 @@ public class DrawWindow extends JPanel {
 					g.setColor(Color.BLUE);
 					break;
 				case 1:
-					g.setColor(Color.MAGENTA);
+					g.setColor(GREEN);
 					break;
 				case 2:
 					g.setColor(Color.RED);

@@ -20,8 +20,8 @@ public class MapTest extends TestCase {
 	}
 
 	public void testGetAgents() throws Exception {
-		Map map = new Map(null, 0, null, -1);
-		map.trackAgent(new Agent(null));
+		Map map = new Map(coords, 0, null, -1);
+		map.trackAgent(new Agent(new int[2]));
 		assertEquals(1, map.getAgents().size());
 	}
 

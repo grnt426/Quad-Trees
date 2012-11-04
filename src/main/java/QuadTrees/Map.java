@@ -16,8 +16,6 @@ public class Map {
 	 */
 	private HashMap<Integer, Map> map;
 
-	private static Map theRoot;
-
 	private Map parent;
 
 	private int quadNum;
@@ -46,8 +44,6 @@ public class Map {
 	 *                 is not sub-divided.
 	 */
 	public Map(int[][] boundary, int part, Map parent, int quadNum) {
-		if (theRoot == null)
-			theRoot = this;
 		map = new HashMap<Integer, Map>();
 		agents = new HashSet<Agent>();
 		this.boundary = boundary;
@@ -66,6 +62,12 @@ public class Map {
 	 */
 	public Map trackAgent(Agent a) {
 		int[] loc = a.getCoords();
+
+		if (loc[0] < getStartX() || loc[0] > getEndX() || loc[1] < getStartY()
+				|| loc[1] > getEndY()) {
+			return null;
+		}
+
 		if (map.isEmpty()) {
 			agents.add(a);
 			a.setQuadrant(this);
@@ -209,8 +211,13 @@ public class Map {
 	}
 
 	public void updateQuadrant(Agent agent) {
+		if (parent == null)
+			return;
 		agents.remove(agent);
-		theRoot.trackAgent(agent); // TODO: optimize, maybe?
+		Map curParent = parent;
+		while (curParent.trackAgent(agent) == null) {
+			curParent = curParent.getParent();
+		}
 	}
 
 	public int getQuadNum() {
