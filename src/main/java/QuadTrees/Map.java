@@ -39,12 +39,12 @@ public class Map {
 	 *                 its child quadrants will not be).  If false, this quadrant
 	 *                 is not sub-divided.
 	 */
-	public Map(int[][] boundary, boolean part) {
+	public Map(int[][] boundary, int part) {
 		map = new HashMap<Integer, Map>();
 		agents = new HashSet<Agent>();
 		this.boundary = boundary;
-		if (part) {
-			partition();
+		if (part > 0) {
+			partition(--part);
 		}
 	}
 
@@ -155,10 +155,10 @@ public class Map {
 		return newBoundary;
 	}
 
-	private void partition() {
+	private void partition(int parts) {
 		if (map.isEmpty()) {
 			for (int i = 0; i < MAX_PARTS; i++) {
-				map.put(i, new Map(findNewPartitionBoundary(i), false));
+				map.put(i, new Map(findNewPartitionBoundary(i), parts));
 			}
 		} else {
 			// TODO: maybe re-partition to an exponential size?

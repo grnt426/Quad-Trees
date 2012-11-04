@@ -20,18 +20,18 @@ public class MapTest extends TestCase {
 	}
 
 	public void testGetAgents() throws Exception {
-		Map map = new Map(null, false);
+		Map map = new Map(null, 0);
 		map.trackAgent(new Agent("Bob", null));
 		assertEquals(1, map.getAgents().size());
 	}
 
 	public void testGetMiddleXBoundary() throws Exception {
-		Map map = new Map(coords, true);
+		Map map = new Map(coords, 1);
 		assertEquals(50, map.getMiddleXBoundary());
 	}
 
 	public void testGetMiddleYBoundary() throws Exception {
-		Map map = new Map(coords, true);
+		Map map = new Map(coords, 1);
 		assertEquals(50, map.getMiddleYBoundary());
 	}
 
@@ -39,7 +39,7 @@ public class MapTest extends TestCase {
 		int[] agentCoords = new int[2];
 		agentCoords[0] = 75;
 		agentCoords[1] = 75;
-		Map map = new Map(coords, true);
+		Map map = new Map(coords, 1);
 		Agent a = new Agent("Bob", agentCoords);
 		map.trackAgent(a);
 		assertEquals(1, map.getAgentsAtQuadrant(3).size());
