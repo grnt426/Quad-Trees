@@ -15,7 +15,7 @@ public class Main {
 		boundary[0][0] = 0;
 		boundary[0][1] = 0;
 		boundary[1][0] = 640;
-		boundary[1][0] = 480;
+		boundary[1][1] = 480;
 		Map map = new Map(boundary, true);
 
 		// Setup the Agent

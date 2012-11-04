@@ -112,7 +112,7 @@ public class Map {
 
 		// For readability, store mid points now
 		int midX = getMiddleXBoundary();
-		int midY = getMiddleXBoundary();
+		int midY = getMiddleYBoundary();
 
 		switch (quadrant) {
 
@@ -175,5 +175,25 @@ public class Map {
 
 	public Map getQuadrant(int i) {
 		return map.get(i);
+	}
+
+	public int getStartX() {
+		return boundary[0][0];
+	}
+
+	public int getStartY() {
+		return boundary[0][1];
+	}
+
+	public int getEndX() {
+		return boundary[1][0];
+	}
+
+	public int getEndY() {
+		return boundary[1][1];
+	}
+
+	public int getSubQuadrantCount() {
+		return map.size();
 	}
 }
