@@ -54,7 +54,7 @@ public class MapTest extends TestCase {
 		Agent a = new Agent(agentCoords);
 		map.trackAgent(a);
 		Map n = map.getQuadrant(3).getQuadrant(3).getQuadrant(3);
-		assertEquals(1, n.getAgentsAtQuadrant(1).size());
-		assertEquals(n.getQuadrant(1), a.getQuadrant());
+		assertEquals(1, n.getAgentsAtQuadrant(2).size());
+		assertEquals(n.getQuadrant(2), a.getQuadrant());
 	}
 }
