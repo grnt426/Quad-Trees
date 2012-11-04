@@ -55,11 +55,6 @@ public class DrawWindow extends JPanel {
 		g.drawRect(node.getStartX(), node.getStartY(),
 				node.getEndX() - node.getStartX(),
 				node.getEndY() - node.getStartY());
-		if (node.getSubQuadrantCount() == 0) {
-			String quadNum = node.getQuadNum() + "";
-			g.drawChars(quadNum.toCharArray(), 0, quadNum.length(),
-					node.getStartX() + 5, node.getStartY() + 15);
-		}
 		for (int i = 0; i < node.getSubQuadrantCount(); i++) {
 			drawGrid(node.getQuadrant(i), g);
 		}
