@@ -50,9 +50,11 @@ public class Map {
 		agents = new HashSet<Agent>();
 		this.boundary = boundary;
 		this.parent = parent;
-		this.quadNum = quadNum;
 		if (part > 0) {
+			this.quadNum = -1;
 			partition(--part);
+		} else {
+			this.quadNum = quadNum;
 		}
 	}
 
@@ -65,25 +67,26 @@ public class Map {
 	public Map trackAgent(Agent a) {
 		int[] loc = a.getCoords();
 
-		if (loc[0] < getStartX() || loc[0] > getEndX() || loc[1] < getStartY()
-				|| loc[1] > getEndY()) {
+		if (loc[0] < getStartX() || loc[0] > getEndX()
+				|| loc[1] < getStartY() || loc[1] > getEndY()) {
 			return null;
 		}
 
-		if (map.isEmpty()) {
+		if (onBoundary(loc)) {
+			resolveBoundary(a);
+		} else if (map.isEmpty()) {
 			agents.add(a);
 			a.setQuadrant(this);
-			if (agents.size() > 1)
-				containsMultiple.add(this);
+			checkMultiple();
 		} else {
-			if (loc[0] <= getMiddleXBoundary()) {
-				if (loc[1] <= getMiddleYBoundary()) {
+			if (loc[0] < getMiddleXBoundary()) {
+				if (loc[1] < getMiddleYBoundary()) {
 					return map.get(0).trackAgent(a);
 				} else {
 					return map.get(2).trackAgent(a);
 				}
 			} else {
-				if (loc[1] <= getMiddleYBoundary()) {
+				if (loc[1] < getMiddleYBoundary()) {
 					return map.get(1).trackAgent(a);
 				} else {
 					return map.get(3).trackAgent(a);
@@ -92,6 +95,31 @@ public class Map {
 		}
 
 		return this;
+	}
+
+	private void checkMultiple() {
+		if (agents.size() > 1)
+			containsMultiple.add(this);
+		if (agents.size() < 2)
+			containsMultiple.remove(this);
+	}
+
+	private boolean onBoundary(int[] loc) {
+		return (loc[0] == getMiddleXBoundary()
+				|| loc[1] == getMiddleYBoundary()) && map.size() > 0;
+	}
+
+	private Map resolveBoundary(Agent a) {
+		Map curParent = this;
+		while (curParent.getParent() != null
+				&& curParent.onBoundary(a.getCoords())) {
+			curParent = curParent.getParent();
+		}
+
+		a.setQuadrant(curParent);
+		curParent.getAgents().add(a);
+		checkMultiple();
+		return curParent;
 	}
 
 	public Set<Agent> getAgents() {
@@ -215,12 +243,9 @@ public class Map {
 	}
 
 	public void updateQuadrant(Agent agent) {
-		if (parent == null)
-			return;
 		agents.remove(agent);
-		if (agents.size() < 2)
-			containsMultiple.remove(this);
-		Map curParent = parent;
+		checkMultiple();
+		Map curParent = parent == null ? this : parent;
 		while (curParent.trackAgent(agent) == null) {
 			curParent = curParent.getParent();
 		}

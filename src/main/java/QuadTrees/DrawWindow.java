@@ -40,8 +40,10 @@ public class DrawWindow extends JPanel {
 					g.setColor(Color.RED);
 					break;
 				case 3:
-				default:
 					g.setColor(Color.DARK_GRAY);
+					break;
+				default:
+					g.setColor(Color.PINK);
 			}
 			g.fillRect(coords[0] - 1, coords[1] - 1, 3, 3);
 		}
