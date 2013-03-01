@@ -16,10 +16,7 @@ public class Agent{
 	private final int MAX_Y_BOUNDARY;
 	private boolean xPositive;
 	private boolean yPositive;
-	private boolean newXPositive;
-	private boolean newYPositive;
 	private static final Random gen = new Random(0);
-	private boolean collided;
 	private boolean[] collideWalls = {false, false, false, false};
 	private int walls = 0;
 
@@ -28,8 +25,8 @@ public class Agent{
 		moveAlgo = gen.nextInt(maxMoveAlgos);
 //		MAX_X_BOUNDARY = 90 + gen.nextInt(220);
 //		MAX_Y_BOUNDARY = 80 + gen.nextInt(150);
-		MAX_X_BOUNDARY = 1050;
-		MAX_Y_BOUNDARY = 650;
+		MAX_X_BOUNDARY = 1195;
+		MAX_Y_BOUNDARY = 795;
 		xPositive = gen.nextBoolean();
 		yPositive = gen.nextBoolean();
 	}
@@ -95,11 +92,11 @@ public class Agent{
 	}
 
 	private boolean belowXBounds(int x){
-		return x < 1100 - MAX_X_BOUNDARY;
+		return x < 1200 - MAX_X_BOUNDARY;
 	}
 
 	private boolean belowYBounds(int y){
-		return y < 700 - MAX_Y_BOUNDARY;
+		return y < 800 - MAX_Y_BOUNDARY;
 	}
 
 	private boolean aboveXBounds(int x){
@@ -151,5 +148,9 @@ public class Agent{
 
 	public void setYPositive(boolean yPositive){
 		this.yPositive = yPositive;
+	}
+
+	public boolean collidedWithAgents(){
+		return walls > 0;
 	}
 }

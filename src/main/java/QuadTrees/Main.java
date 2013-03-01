@@ -25,9 +25,9 @@ public class Main{
 		int[][] boundary = new int[2][2];
 		boundary[0][0] = 0;
 		boundary[0][1] = 0;
-		boundary[1][0] = 1175;
-		boundary[1][1] = 775;
-		Map map = new Map(boundary, 5, null, -1);
+		boundary[1][0] = 1200;
+		boundary[1][1] = 800;
+		Map map = new Map(boundary, 6, null, -1);
 		agents = new ArrayList<Agent>();
 		Random gen = new Random();
 
@@ -71,7 +71,7 @@ public class Main{
 //		map.trackAgent(d);
 
 
-		for(int i = 0; i < 1000; i++){
+		for(int i = 0; i < 25000; i++){
 
 			// Setup the Agent
 			int[] location = new int[2];
@@ -80,10 +80,10 @@ public class Main{
 			Agent a = new Agent(location);
 			map.trackAgent(a);
 			agents.add(a);
-			x += 1100 / 100;
-			if(x > 1000){
-				x = 8;
-				y += 600 / 10;
+			x += 6;
+			if(x > 1195){
+				x = 6;
+				y += 6;
 			}
 		}
 
@@ -102,17 +102,19 @@ public class Main{
 	private void loop(){
 
 		long tick = 0;
+		long prevTime = System.currentTimeMillis();
+		int frames = 0;
 
 		while(true){
 			moveAgents(tick++);
 			detectCollisions();
 //			if(tick % 10 == 0)
 			frame.repaint();
-			try{
-				Thread.sleep(1);
-			}
-			catch(InterruptedException e){
-				e.printStackTrace();
+			frames++;
+			if(System.currentTimeMillis() - prevTime > 1000){
+				prevTime = System.currentTimeMillis();
+				frame.setTitle("QuadTrees! FPS: " + frames);
+				frames = 0;
 			}
 		}
 	}
@@ -130,16 +132,6 @@ public class Main{
 					}
 					if(checkAgent.isColliding(againstAgent)){
 						checkAgent.collideWith(againstAgent);
-					}
-				}
-
-				// TODO: make the below less copy/paste
-				for(Agent subAgent : node.getAgentsInChildNodes()){
-					if(checkAgent == subAgent){
-						continue;
-					}
-					if(checkAgent.isColliding(subAgent)){
-						checkAgent.collideWith(subAgent);
 					}
 				}
 			}
