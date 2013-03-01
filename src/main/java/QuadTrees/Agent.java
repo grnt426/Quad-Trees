@@ -1,11 +1,12 @@
 package QuadTrees;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
  * Author:      Grant Kurtz
  */
-public class Agent {
+public class Agent{
 
 	private int[] coords;
 	private Map quadrant;
@@ -17,39 +18,41 @@ public class Agent {
 	private boolean yPositive;
 	private boolean newXPositive;
 	private boolean newYPositive;
-	private static final Random gen = new Random();
+	private static final Random gen = new Random(0);
 	private boolean collided;
+	private boolean[] collideWalls = {false, false, false, false};
+	private int walls = 0;
 
-	public Agent(int[] coords) {
+	public Agent(int[] coords){
 		this.coords = coords;
 		moveAlgo = gen.nextInt(maxMoveAlgos);
 //		MAX_X_BOUNDARY = 90 + gen.nextInt(220);
 //		MAX_Y_BOUNDARY = 80 + gen.nextInt(150);
-		MAX_X_BOUNDARY = 310;
-		MAX_Y_BOUNDARY = 230;
+		MAX_X_BOUNDARY = 1050;
+		MAX_Y_BOUNDARY = 650;
 		xPositive = gen.nextBoolean();
 		yPositive = gen.nextBoolean();
 	}
 
-	public int[] getCoords() {
+	public int[] getCoords(){
 		return coords;
 	}
 
-	public void setCoords(int[] coords) {
+	public void setCoords(int[] coords){
 		this.coords = coords;
 	}
 
-	public Map getQuadrant() {
+	public Map getQuadrant(){
 		return quadrant;
 	}
 
-	public void setQuadrant(Map quadrant) {
+	public void setQuadrant(Map quadrant){
 		this.quadrant = quadrant;
 	}
 
-	public void move(long tick) {
+	public void move(long tick){
 
-		switch (moveAlgo) {
+		switch(moveAlgo){
 			case 0:
 			default:
 				squareMove(tick);
@@ -57,74 +60,96 @@ public class Agent {
 		quadrant.updateQuadrant(this);
 	}
 
-	private void squareMove(long tick) {
+	private void squareMove(long tick){
 
 		int x = coords[0];
 		int y = coords[1];
 
-		if (!xPositive && belowXBounds(x))
-			xPositive = true;
-		else if (xPositive && aboveXBounds(x))
-			xPositive = false;
+		// if we are surrounded on all sides, skip this tick, but keep our
+		// vector
+		if(walls == 4){
+			walls = 0;
+			Arrays.fill(collideWalls, false);
+			return;
+		}
+		walls = 0;
 
-		if (!yPositive && belowYBounds(y))
+		if(!xPositive && (belowXBounds(x) || collideWalls[3])){
+			xPositive = true;
+		}
+		else if(xPositive && (aboveXBounds(x) || collideWalls[1])){
+			xPositive = false;
+		}
+
+		if(!yPositive && (belowYBounds(y) || collideWalls[0])){
 			yPositive = true;
-		else if (yPositive && aboveYBounds(y))
+		}
+		else if(yPositive && (aboveYBounds(y) || collideWalls[2])){
 			yPositive = false;
+		}
+
+		Arrays.fill(collideWalls, false);
 
 		coords[0] += xPositive ? 1 : -1;
 		coords[1] += yPositive ? 1 : -1;
 	}
 
-	private boolean belowXBounds(int x) {
-		return x < 320 - MAX_X_BOUNDARY;
+	private boolean belowXBounds(int x){
+		return x < 1100 - MAX_X_BOUNDARY;
 	}
 
-	private boolean belowYBounds(int y) {
-		return y < 240 - MAX_Y_BOUNDARY;
+	private boolean belowYBounds(int y){
+		return y < 700 - MAX_Y_BOUNDARY;
 	}
 
-	private boolean aboveXBounds(int x) {
-		return x > 320 + MAX_X_BOUNDARY;
+	private boolean aboveXBounds(int x){
+		return x > MAX_X_BOUNDARY;
 	}
 
-	private boolean aboveYBounds(int y) {
-		return y > 240 + MAX_Y_BOUNDARY;
+	private boolean aboveYBounds(int y){
+		return y > MAX_Y_BOUNDARY;
 	}
 
-	public boolean isColliding(Agent againstAgent) {
+	public boolean isColliding(Agent againstAgent){
 		int[] againstCoords = againstAgent.getCoords();
 		int diff = (Math.abs(coords[0] - againstCoords[0]) +
-				Math.abs(coords[1] - againstCoords[1]));
+					Math.abs(coords[1] - againstCoords[1]));
 		return diff < 3;
 	}
 
-	public void collideWith(Agent againstAgent) {
-		if (collided)
-			return;
-		collided = true;
-		coords[0] += xPositive ? -1 : 1;
-		coords[1] += yPositive ? -1 : 1;
-
-		newXPositive = xPositive == againstAgent.xPositive ? xPositive
-				: !xPositive;
-		newYPositive = yPositive == againstAgent.yPositive ? yPositive
-				: !yPositive;
+	public void collideWith(Agent againstAgent){
+		int[] againstCoords = againstAgent.getCoords();
+		if(againstCoords[0] < coords[0]){
+			if(!collideWalls[3]){
+				walls++;
+			}
+			collideWalls[3] = true;
+		}
+		else if(againstCoords[0] > coords[0]){
+			if(!collideWalls[1]){
+				walls++;
+			}
+			collideWalls[1] = true;
+		}
+		if(againstCoords[1] < coords[1]){
+			if(!collideWalls[0]){
+				walls++;
+			}
+			collideWalls[0] = true;
+		}
+		if(againstCoords[1] > coords[1]){
+			if(!collideWalls[2]){
+				walls++;
+			}
+			collideWalls[2] = true;
+		}
 	}
 
-	public void updateVector() {
-		if (!collided)
-			return;
-		xPositive = newXPositive;
-		yPositive = newYPositive;
-		collided = false;
-	}
-
-	public void setXPositive(boolean xPositive) {
+	public void setXPositive(boolean xPositive){
 		this.xPositive = xPositive;
 	}
 
-	public void setYPositive(boolean yPositive) {
+	public void setYPositive(boolean yPositive){
 		this.yPositive = yPositive;
 	}
 }
